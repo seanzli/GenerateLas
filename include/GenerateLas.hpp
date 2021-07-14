@@ -1,15 +1,16 @@
 /*
- * @Author: your name
+ * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-13 21:38:29
+ * @LastEditTime: 2021-07-14 21:53:31
  * @LastEditors: Sean
- * @Description: In User Settings Edit
+ * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
  */
 #include <vector>
 #include <string>
 
 #include "StructDef.h"
+#include "DecodeFile.hpp"
 
 class GenerateLas {
 public:
@@ -19,13 +20,5 @@ public:
     void mainProcess(const std::string& lidar_file, const std::string& output_file);
 };
 
-class DecodeLidarFile {
-public:
-    DecodeLidarFile() = default;
-    virtual ~DecodeLidarFile() {};
-    virtual void decodeFile(const char* p_file, const int& length, std::vector<LidarPoint<double>>& out);
-};
 
-class DecodeSdcLidarFile : public DecodeLidarFile {
 
-};

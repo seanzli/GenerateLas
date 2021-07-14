@@ -2,7 +2,7 @@
  * @Description: Basic Struct Defind
  * @Author: Sean
  * @Date: 2021-07-13 21:24:46
- * @LastEditTime: 2021-07-13 21:52:43
+ * @LastEditTime: 2021-07-14 21:50:26
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -55,6 +55,12 @@ struct Point
 template<class T>
 struct LidarPoint{
     Point<T> point;
+    
     double gps_time;
-    LidarPoint(): gps_time(0.0) {}
+    unsigned char returnNumber;
+    unsigned char numbersOfReturns;
+    unsigned char ref;
+    unsigned char reserve;
+    
+    LidarPoint() = default;
 };
