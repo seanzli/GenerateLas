@@ -2,7 +2,7 @@
  * @Description: Decode Riegl Lidar File
  * @Author: Sean
  * @Date: 2021-07-14 21:54:07
- * @LastEditTime: 2021-07-14 22:15:10
+ * @LastEditTime: 2021-07-15 21:10:49
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -46,7 +46,7 @@ private:
     };
 #pragma pack()
     const int m_struct_size = sizeof(SdcStruct);
-    LidarPoint<double>& convertSdc2LidarPoint(const SdcStruct& in) const{
+    LidarPoint<double> convertSdc2LidarPoint(const SdcStruct& in) const{
         LidarPoint<double> out;
         out.point.x = in.x;
         out.point.y = in.y;
