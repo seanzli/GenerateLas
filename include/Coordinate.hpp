@@ -2,7 +2,7 @@
  * @Description: coordinate convert
  * @Author: Sean
  * @Date: 2021-07-15 21:25:53
- * @LastEditTime: 2021-07-16 22:34:14
+ * @LastEditTime: 2021-07-16 22:53:43
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -14,13 +14,46 @@
 
 #include "StructDef.h"
 
+
+// generate ellip arguments
+// could use EllipBuilder to instance class Ellip
+struct Ellip {
+    double major;
+    double minor;
+
+    Ellip& operator=(const Ellip& in) {
+        this->major = in.major;
+        this->minor = in.minor;
+        return (*this);
+    }
+};
+
+enum EllipType{
+    WGS84,
+};
+
+class EllipBuilder : public Ellip {
+public:
+    EllipBuilder() = delete;
+    EllipBuilder(const EllipType& type) {
+        switch (type) {
+        case WGS84: para.major = 6378137.0; para.minor = 6356752.31424518; break;
+        }
+    }
+    operator Ellip() {
+        std::move(para);
+    }
+private:
+    Ellip para;
+};
+
 // mono
 class Coordinate {
 public:
     ~Coordinate() = default;
 
-    static Coordinate* instance(const double& _major, const double & _minor) {
-        m_instance = new Coordinate(_major, _minor);
+    static Coordinate* instance(const Ellip& para) {
+        m_instance = new Coordinate(para);
         return m_instance;
     }
 
@@ -33,30 +66,25 @@ public:
         double n;
         ECEF out;
 
-        n = (m_semimajor_axis*m_semimajor_axis) / sqrt(
-            m_semimajor_axis*m_semimajor_axis*cos(in.lat)*cos(in.lat) +
-            m_semiminor_axis * m_semiminor_axis*sin(in.lat)*sin(in.lat));
+        n = (m_ellip_para.major*m_ellip_para.major) / sqrt(
+            m_ellip_para.major*m_ellip_para.major*cos(in.lat)*cos(in.lat) +
+            m_ellip_para.minor * m_ellip_para.minor*sin(in.lat)*sin(in.lat));
 
         out.x = (n + in.alt)*cos(in.lat)*cos(in.lon);
         out.y = (n + in.alt)*cos(in.lat)*sin(in.lon);
-        out.z = ((m_semiminor_axis*m_semiminor_axis) / (m_semimajor_axis*m_semimajor_axis)*n
+        out.z = ((m_ellip_para.minor*m_ellip_para.minor) / (m_ellip_para.major*m_ellip_para.major)*n
             + in.alt) * sin(in.lat);
 
         return out;
     }
 
 private:
-    static double m_semimajor_axis;
-    static double m_semiminor_axis;
+    static Ellip m_ellip_para;
     static Coordinate *m_instance;
 
-    Coordinate() {
-        m_semimajor_axis = 6378137.0;
-        m_semiminor_axis = 6356752.31424518;
-    }
+    Coordinate() {}
 
-    Coordinate(const double& _major, const double & _minor) {
-        m_semimajor_axis = _major;
-        m_semiminor_axis = _minor;
+    Coordinate(const Ellip& para) {
+        m_ellip_para = para;
     }
 };

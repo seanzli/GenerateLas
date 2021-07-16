@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-16 22:34:43
+ * @LastEditTime: 2021-07-16 22:46:17
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -24,8 +24,8 @@ public:
     // define coordinate, class coordinate is singleton mono pattern, use as globle, 
     // use instance() to get
     // use instance(const double&, const double&) to modify;
-    void defindCoordinate(const double & major, const double & minor) {
-        Coordinate *p_coord = Coordinate::instance(major, minor);
+    void defindCoordinate(const Ellip& para) {
+        Coordinate *p_coord = Coordinate::instance(para);
     }
 
     /**
