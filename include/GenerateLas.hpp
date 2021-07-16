@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-15 21:59:30
+ * @LastEditTime: 2021-07-16 22:34:43
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -14,11 +14,19 @@
 #include "StructDef.h"
 #include "DecodeFileFactory.hpp"
 #include "DecodeSbet.hpp"
+#include "Coordinate.hpp"
 
 class GenerateLas {
 public:
     GenerateLas() = default;
     ~GenerateLas() = default;
+
+    // define coordinate, class coordinate is singleton mono pattern, use as globle, 
+    // use instance() to get
+    // use instance(const double&, const double&) to modify;
+    void defindCoordinate(const double & major, const double & minor) {
+        Coordinate *p_coord = Coordinate::instance(major, minor);
+    }
 
     /**
      * @description: main process of generate las

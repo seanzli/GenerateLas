@@ -2,7 +2,7 @@
  * @Description: decode pos file
  * @Author: Sean
  * @Date: 2021-07-15 21:11:21
- * @LastEditTime: 2021-07-15 21:56:20
+ * @LastEditTime: 2021-07-16 22:29:56
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -22,7 +22,7 @@ public:
     virtual ~DecodePosFile() = 0;
     virtual void decodePos(const std::string& pos_file, std::vector<Traj>& out) {}
 protected:
-    Coordinate m_coord = Coordinate::instace();
+    Coordinate *mp_coord = Coordinate::intance();
 };
 
 class DecodeSbetFile : public DecodePosFile {
@@ -87,7 +87,7 @@ private:
         out.att.x = in.roll;
         out.att.y = in.pitch;
         out.att.z = in.heading - in.wander;
-        out.pos = m_coord.lla2ecef(LLA(in.latitude, in.longitude, in.altitude));
+        out.pos = mp_coord->lla2ecef(LLA(in.latitude, in.longitude, in.altitude));
         out.val = VAL(in.speed_x, in.speed_y, in.speed_z);
         return out;
     }
