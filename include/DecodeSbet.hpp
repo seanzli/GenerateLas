@@ -2,7 +2,7 @@
  * @Description: decode pos file
  * @Author: Sean
  * @Date: 2021-07-15 21:11:21
- * @LastEditTime: 2021-07-16 22:29:56
+ * @LastEditTime: 2021-07-16 22:36:34
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -22,7 +22,7 @@ public:
     virtual ~DecodePosFile() = 0;
     virtual void decodePos(const std::string& pos_file, std::vector<Traj>& out) {}
 protected:
-    Coordinate *mp_coord = Coordinate::intance();
+    Coordinate *mp_coord = Coordinate::instance();
 };
 
 class DecodeSbetFile : public DecodePosFile {
