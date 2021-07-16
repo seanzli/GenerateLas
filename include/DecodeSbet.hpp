@@ -2,7 +2,7 @@
  * @Description: decode pos file
  * @Author: Sean
  * @Date: 2021-07-15 21:11:21
- * @LastEditTime: 2021-07-16 22:36:34
+ * @LastEditTime: 2021-07-16 23:15:03
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -60,8 +60,8 @@ private:
 	};
 #pragma pack()
     void decodeSbet(const std::string& pos_file, std::vector<SbetEntry>& out) {
-        FILE* fd;
-        if ((fopen_s(&fd, pos_file.c_str(), "rb")) != 0) {
+        FILE* fd = fopen(pos_file.c_str(), "rb");
+        if (fd == nullptr) {
             return ; //can not open
         }
 

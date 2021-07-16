@@ -2,7 +2,7 @@
  * @Description: coordinate convert
  * @Author: Sean
  * @Date: 2021-07-15 21:25:53
- * @LastEditTime: 2021-07-16 22:53:43
+ * @LastEditTime: 2021-07-16 23:12:54
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -41,7 +41,7 @@ public:
         }
     }
     operator Ellip() {
-        std::move(para);
+        return std::move(para);
     }
 private:
     Ellip para;

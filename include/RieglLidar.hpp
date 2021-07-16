@@ -2,21 +2,24 @@
  * @Description: Decode Riegl Lidar File
  * @Author: Sean
  * @Date: 2021-07-14 21:54:07
- * @LastEditTime: 2021-07-15 21:10:49
+ * @LastEditTime: 2021-07-16 23:19:01
  * @LastEditors: Sean
  * @Reference: 
  */
 
+#pragma once
+
 #include "DecodeFile.hpp"
 
-#include <string>
+#include <cstring>
+#include <cstdio>
 
 class DecodeSdcLidarFile : public DecodeLidarFile {
 public:
     unsigned int decodeFile(const char* p_file, const int& length, const int& read_num , std::vector<LidarPoint<double>>& out) {
         const int size = std::min(read_num * m_struct_size, length) / m_struct_size;
         SdcStruct *arr = new SdcStruct[size];
-        ::memcpy(arr, p_file, size*m_struct_size);
+        memcpy(arr, p_file, size*m_struct_size);
         p_file +=  size*m_struct_size;
         for (int i = 0; i < size; ++i)
             out.emplace_back(convertSdc2LidarPoint(arr[i]));
