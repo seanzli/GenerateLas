@@ -95,15 +95,15 @@ struct ATT : public Point<double> {
     double& pitch = y;
     double& heading = z;
 
-    ATT(const Point<double>& in) {
-        this->x = in.x;
-        this->y = in.y;
-        this->z = in.z;
-    }
     ATT() {
         this->x = 0.0;
         this->y = 0.0;
         this->z = 0.0;
+    }
+    ATT(const Point<double>& in) {
+        this->x = in.x;
+        this->y = in.y;
+        this->z = in.z;
     }
 };
 
