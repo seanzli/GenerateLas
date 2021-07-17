@@ -40,6 +40,12 @@ struct Point
         return out;
     }
 
+    const bool operator==(const Point<T>& a) const{
+        return (abs(a.x - this->x) < 1e-4 &&
+                abs(a.y - this->y) < 1e-4 &&
+                abs(a.z - this->z) < 1e-4);
+    }
+
     template<class U>
     const T distance(const Point<U>& a) const {
         Point out = (*this) - a;

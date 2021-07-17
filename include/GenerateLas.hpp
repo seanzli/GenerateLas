@@ -25,7 +25,7 @@ public:
     // use instance() to get
     // use instance(const double&, const double&) to modify;
     void defindCoordinate(const Ellip& para) {
-        Coordinate *p_coord = Coordinate::instance(para);
+        Coordinate::instance(para);
     }
 
     /**

@@ -52,13 +52,8 @@ class Coordinate {
 public:
     ~Coordinate() = default;
 
-    static Coordinate* instance(const Ellip& para) {
-        m_instance = new Coordinate(para);
-        return m_instance;
-    }
-
-    // do not use this, unless u has define m_instance.
-    static Coordinate* instance() {
+    static Coordinate& instance(const Ellip& para) {
+        static Coordinate m_instance = Coordinate(para);
         return m_instance;
     }
 
@@ -79,10 +74,9 @@ public:
     }
 
 private:
-    static Ellip m_ellip_para;
-    static Coordinate *m_instance;
+    Ellip m_ellip_para = EllipBuilder(WGS84);
 
-    Coordinate() {}
+    Coordinate() = delete;
 
     Coordinate(const Ellip& para) {
         m_ellip_para = para;

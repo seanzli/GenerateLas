@@ -22,7 +22,7 @@ public:
     virtual ~DecodePosFile() = 0;
     virtual void decodePos(const std::string& pos_file, std::vector<Traj>& out) {}
 protected:
-    Coordinate *mp_coord = Coordinate::instance();
+    Coordinate m_coord = Coordinate::instance(EllipBuilder(WGS84));
 };
 
 class DecodeSbetFile : public DecodePosFile {
@@ -87,7 +87,7 @@ private:
         out.att.x = in.roll;
         out.att.y = in.pitch;
         out.att.z = in.heading - in.wander;
-        out.pos = mp_coord->lla2ecef(LLA(in.latitude, in.longitude, in.altitude));
+        out.pos = m_coord.lla2ecef(LLA(in.latitude, in.longitude, in.altitude));
         out.val = VAL(in.speed_x, in.speed_y, in.speed_z);
         return out;
     }
