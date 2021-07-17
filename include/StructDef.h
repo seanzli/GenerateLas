@@ -21,6 +21,18 @@ struct Point
 
     Point():x(0.0), y(0.0), z(0.0) {}
     Point(const T& _x, const T& _y, const T& _z) : x(_x), y(_y), z(_z) {}
+    Point(const Point<T>& in) {
+        this->x = in.x;
+        this->y = in.y;
+        this->z = in.z;
+    }
+
+    Point operator=(const Point<T>& a) {
+        this->x = a.x;
+        this->y = a.y;
+        this->z = a.z;
+        return (*this);
+    }
 
     template<class U>
     const Point operator+(const Point<U>& a) const{
@@ -61,7 +73,8 @@ struct Point
 };
 
 template<class T>
-struct LidarPoint{
+class LidarPoint{
+public:
     Point<T> point;
     
     double gps_time;
@@ -73,16 +86,39 @@ struct LidarPoint{
     LidarPoint() = default;
 };
 
-using ATT  = Point<double>; // roll pitch heading;
+//using ATT  = Point<double>;
 using ECEF = Point<double>;
 using VAL  = Point<double>;
 
-struct LLA {
-    double lat;
-    double lon;
-    double alt;
-    LLA(double _lat, double _lon, double _alt) : lat(_lat), lon(_lon), alt(_alt) {}
+struct ATT : public Point<double> {
+    double& roll = x;
+    double& pitch = y;
+    double& heading = z;
+
+    ATT(const Point<double>& in) {
+        this->x = in.x;
+        this->y = in.y;
+        this->z = in.z;
+    }
+    ATT() {
+        this->x = 0.0;
+        this->y = 0.0;
+        this->z = 0.0;
+    }
 };
+
+struct LLA : public Point<double> {
+    double& lat = x;
+    double& lon = y;
+    double& alt = z;
+
+    LLA(const double& _x, const double& _y, const double& _z) {
+        x = _x;
+        y = _y;
+        z = _z;
+    }
+};
+
 
 struct Traj {
     double gps_time;
