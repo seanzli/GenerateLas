@@ -95,11 +95,8 @@ struct ATT : public Point<double> {
     double& pitch = y;
     double& heading = z;
 
-    ATT() {
-        this->x = 0.0;
-        this->y = 0.0;
-        this->z = 0.0;
-    }
+    using Point::Point;
+
     ATT(const Point<double>& in) {
         this->x = in.x;
         this->y = in.y;
@@ -112,11 +109,7 @@ struct LLA : public Point<double> {
     double& lon = y;
     double& alt = z;
 
-    LLA(const double& _x, const double& _y, const double& _z) {
-        x = _x;
-        y = _y;
-        z = _z;
-    }
+    using Point::Point;
 };
 
 
