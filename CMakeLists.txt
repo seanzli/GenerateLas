@@ -8,7 +8,12 @@ enable_testing()
 
 include_directories(./include)
 
-add_executable(GenerateLas main.cpp)
+# glog
+find_package(Glog REQUIRED)
+include_directories(BEFORE ${GLOG_INCLUDE_DIRS}) 
+
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(${PROJECT_NAME} -lglog -lgflags -lpthread)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
