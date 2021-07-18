@@ -32,19 +32,18 @@ enum EllipType{
     WGS84,
 };
 
-class EllipBuilder : public Ellip {
+struct EllipBuilder : public Ellip {
 public:
     EllipBuilder() = delete;
     EllipBuilder(const EllipType& type) {
         switch (type) {
-        case WGS84: para.major = 6378137.0; para.minor = 6356752.31424518; break;
+        case WGS84: this->major = 6378137.0; this->minor = 6356752.31424518; break;
         }
     }
-    operator Ellip() {
-        return std::move(para);
+    EllipBuilder(const double& _major, const double& _minor) {
+        this->major = _major;
+        this->minor = _minor;
     }
-private:
-    Ellip para;
 };
 
 // mono
@@ -52,9 +51,9 @@ class Coordinate {
 public:
     ~Coordinate() = default;
 
-    static Coordinate& instance(const Ellip& para) {
+    static Coordinate* instance(const Ellip& para) {
         static Coordinate m_instance = Coordinate(para);
-        return m_instance;
+        return &m_instance;
     }
 
     ECEF lla2ecef(const LLA & in) const {

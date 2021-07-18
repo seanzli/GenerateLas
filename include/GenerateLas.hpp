@@ -24,7 +24,7 @@ public:
     // define coordinate, class coordinate is singleton mono pattern, use as globle, 
     // use instance() to get
     // use instance(const double&, const double&) to modify;
-    void defindCoordinate(const Ellip& para) {
+    void defindCoordinate(Ellip para) {
         Coordinate::instance(para);
     }
 
