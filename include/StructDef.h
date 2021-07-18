@@ -86,11 +86,10 @@ public:
     LidarPoint() = default;
 };
 
-//using ATT  = Point<double>;
-using ECEF = Point<double>;
-using VAL  = Point<double>;
+using ECEF = Point<double>; // meters
+using VAL  = Point<double>; // m/s
 
-struct ATT : public Point<double> {
+struct ATT : public Point<double> {  //rad
     double& roll = x;
     double& pitch = y;
     double& heading = z;
@@ -105,11 +104,17 @@ struct ATT : public Point<double> {
 };
 
 struct LLA : public Point<double> {
-    double& lat = x;
-    double& lon = y;
-    double& alt = z;
+    double& lat = x;        // rad
+    double& lon = y;        // rad
+    double& alt = z;        // meter
 
     using Point::Point;
+
+    LLA(const Point<double>& in) {
+        this->x = in.x;
+        this->y = in.y;
+        this->z = in.z;
+    }
 };
 
 
