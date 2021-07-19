@@ -71,6 +71,44 @@ public:
 
         return out;
     }
+    LLA ecef2lla(const ECEF& in) const {
+        double p = 0.0, slat = 0.0, N = 0.0, htold = 0.0, latold = 0.0;
+    	const double e = 0.00669437999013;	//gps
+
+	    int  i = 0;
+	    double tmp = 0.0;
+
+        LLA out;
+	    //Check postion valiable
+	    tmp = in.distance(ECEF(0.0, 0.0, 0.0));
+	    if (fabs(tmp) < m_ellip_para.major*0.5)
+		    return out;
+
+	    //Check range
+	    p = sqrt(in.x * in.x + in.y* in.y);
+	    if (p < 1)
+		    return out;
+
+        out.lat = atan2(in.z, p*(1.0 - e));
+        out.alt = 0;
+
+        for (i = 0; i < 5; i++)
+        {
+            slat = sin(out.lat);
+            N = m_ellip_para.major / sqrt(1.0 - e * slat*slat);
+            htold = out.alt;
+            out.alt = p / cos(out.lat) - N;
+
+            latold = out.lat;
+            out.lat = atan2(in.z, p*(1.0 - e * (N / (N + out.alt))));
+            if (fabs(out.lat - latold) < 1.0e-9 &&
+                fabs(out.alt - htold) < (1.0e-9 * m_ellip_para.major))
+                break;
+        }
+
+        out.lon = atan2(in.y, in.x);
+        return out;
+    }
 
 private:
     Ellip m_ellip_para = EllipBuilder(WGS84);
