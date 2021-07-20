@@ -9,6 +9,8 @@
 #include <iostream>
 #include <glog/logging.h>
 
+#include <string>
+
 #include "GenerateLas.hpp"
 
 int main(int argc, char* argv[]) {
@@ -20,6 +22,12 @@ int main(int argc, char* argv[]) {
     //
     GenerateLas generate;
     generate.defindCoordinate(EllipBuilder(WGS84));
+    
+    std::string pos_file = "/home/z/Documents/data/sbet_Mission.out";
+    std::string sdc_file = "/home/z/Documents/data/190326_072129_Scanner_1.sdc";
+    std::string out_file = "/home/z/Documents/data/190326_072129_Scanner_1.las";
+    
+    generate.mainProcess(LIDAR_TYPE_RIEGL, sdc_file, pos_file, out_file);
 
     LOG(INFO) << "------terminal-------" << std::endl;
 

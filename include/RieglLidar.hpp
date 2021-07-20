@@ -16,7 +16,10 @@
 
 class DecodeSdcLidarFile : public DecodeLidarFile {
 public:
-    unsigned int decodeFile(const char* p_file, const int& length, const int& read_num , std::vector<LidarPoint<double>>& out) {
+    DecodeSdcLidarFile() {}
+    virtual ~DecodeSdcLidarFile() override {}
+    virtual unsigned int decodeFile(const char* p_file, const int& length, const int& read_num ,
+                            std::vector<LidarPoint<double>>& out) override {
         const int size = std::min(read_num * m_struct_size, length) / m_struct_size;
         SdcStruct *arr = new SdcStruct[size];
         memcpy(arr, p_file, size*m_struct_size);

@@ -19,7 +19,7 @@
 class DecodePosFile {
 public:
     DecodePosFile() = default;
-    virtual ~DecodePosFile() = 0;
+    virtual ~DecodePosFile() {}
     virtual void decodePos(const std::string& pos_file, std::vector<Traj>& out) {}
 protected:
     Coordinate* mp_coord = Coordinate::instance(EllipBuilder(WGS84));
@@ -27,9 +27,9 @@ protected:
 
 class DecodeSbetFile : public DecodePosFile {
 public:
-    ~DecodeSbetFile() = default;
+    virtual ~DecodeSbetFile() {}
 
-    void decodePos(const std::string& pos_file, std::vector<Traj>& out) {
+    virtual void decodePos(const std::string& pos_file, std::vector<Traj>& out) {
         std::vector<SbetEntry> tmp;
         decodeSbet(pos_file, tmp);
         for (int i = 0; i < tmp.size(); ++i)

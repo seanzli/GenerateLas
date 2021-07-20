@@ -6,17 +6,17 @@
  * @LastEditors: Sean
  * @Reference: 
  */
-
+#pragma once
 #include "StructDef.h"
 
 #include <vector>
 
 class DecodeLidarFile {
 public:
-    DecodeLidarFile() = default;
+    DecodeLidarFile() {}
     virtual ~DecodeLidarFile() {};
     virtual unsigned int decodeFile(const char* p_file,
                                     const int& length, 
                                     const int& read_num , 
-                                    std::vector<LidarPoint<double>>& out);
+                                    std::vector<LidarPoint<double>>& out) {};
 };
