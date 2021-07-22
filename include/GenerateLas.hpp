@@ -19,7 +19,8 @@
 
 class GenerateLas {
 public:
-    GenerateLas() = default;
+    GenerateLas() : m_read_point_num(1024 * 20) {}
+    GenerateLas(unsigned int _size) : m_read_point_num(_size) {}
     ~GenerateLas() = default;
 
     // define coordinate, class coordinate is singleton mono pattern, use as globle, 
@@ -47,43 +48,55 @@ public:
         // decode pos file
         std::vector<Traj> traj;
         getPos(pos_file, traj);
-        if (traj.size() == 0) {
-            LOG(ERROR) <<"pos file decode error!";
-            return -1;
-        }
+        checkTraj(traj);
 
         // check lidar file
         DecodeLidarFile *p_decoder = DecodeFileFactory::instance(type);
-        if (p_decoder == nullptr) {
-            LOG(ERROR) << "lidar type error!";
-            return -2;
-        }
+        checkLidarFile(p_decoder, lidar_file);
 
-        FILE *fp = fopen(lidar_file.c_str(), "rb");
-        if (fp == nullptr) {
-            LOG(ERROR) << "lidar file can not open!";
-            return -3;
-        }
-        fclose(fp);
-
-        int read_num = 1024;
-        
+        // calculate
+        int read_num = m_read_point_num;
         std::vector<LidarPoint<double>> point;
-        while (fp) {
+        while (read_num) {
             // decode lidar point
-            int num = p_decoder->decodeFile(lidar_file, m_read_point_num, point);
+            point.clear();
+            read_num = p_decoder->decodeFile(lidar_file, m_read_point_num, point);
             // decode las point
         }
-
         return 0;
     }
 
 private:
-    unsigned int m_read_point_num = 1024 * 20;
+    unsigned int m_read_point_num;
 
     void getPos(const std::string& pos_file, std::vector<Traj>& out) {
         DecodePosFile* p_decoder = new DecodeSbetFile();
         p_decoder->decodePos(pos_file, out);
+    }
+
+    int checkLidarFile(DecodeLidarFile* p_decoder, const std::string& lidar_file) {
+        if (p_decoder == nullptr) {
+            LOG(ERROR) << "lidar type error!";
+            throw -2;
+            return -2;
+        }
+        FILE *fp = fopen(lidar_file.c_str(), "rb");
+        if (fp == nullptr) {
+            LOG(ERROR) << "lidar file can not open!";
+            throw -3;
+            return -3;
+        }
+        fclose(fp);
+        fp = nullptr;
+        return 0;
+    }
+    int checkTraj(const std::vector<Traj>& traj) {
+        if (traj.size() == 0) {
+            LOG(ERROR) <<"pos file decode error!";
+            throw -1;
+            return -1;
+        }
+        return 0;
     }
 };
 

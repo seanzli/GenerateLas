@@ -15,6 +15,10 @@
 class DecodeLidarFile {
 public:
     DecodeLidarFile() {}
+
+    DecodeLidarFile(const DecodeLidarFile&) = delete;
+    DecodeLidarFile& operator=(const DecodeLidarFile&) = delete;
+
     virtual ~DecodeLidarFile() {}
     virtual unsigned int decodeFile(const std::string& file_path,
                                     const int& read_num , 

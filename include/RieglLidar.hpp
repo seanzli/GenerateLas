@@ -16,9 +16,8 @@
 
 class DecodeSdcLidarFile : public DecodeLidarFile {
 public:
-    DecodeSdcLidarFile() : fp(nullptr), p_data(nullptr) {
-        fp = nullptr;
-    }
+    DecodeSdcLidarFile() : fp(nullptr), p_data(nullptr) {}
+
     virtual ~DecodeSdcLidarFile() override {
         if (fp)
             fclose(fp);
