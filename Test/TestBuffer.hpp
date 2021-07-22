@@ -21,8 +21,22 @@ TEST(BufferTest, handleFunction) {
     ASSERT_EQ(b.size(), 0) << "clear";
 
     b.push_back(test_v);
-    ASSERT_EQ(b.size(), test_v.size()) << "pop_back vector";
+    ASSERT_EQ(b.size(), test_v.size()) << "push_back vector";
     for (int i = 0; i < 100; i++)
         ASSERT_EQ(b.pop_back(), 99 - i) << "pop_back value";
-        
+    
+    b.clear();
+    b.push_front(test_v);
+    ASSERT_EQ(b.size(), test_v.size()) << "push_front vector";
+    for (int i = 0; i < 100; i++)
+        ASSERT_EQ(b.pop_front(), i) << "pop_front value" << i; 
+
+    b.push_front(test_v);
+    ASSERT_EQ(b.resize(150), 150);
+    b.push_front(test_v);
+    ASSERT_EQ(b.size(), 150) << "push_front vector";
+    for (int i = 0; i < 50; i++)
+        ASSERT_EQ(b.pop_front(), i + 50) << "pop_front value" << i; 
+    for (int i = 0; i < 100; i++)
+        ASSERT_EQ(b.pop_front(), i);
 }
