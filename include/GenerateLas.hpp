@@ -10,6 +10,7 @@
 #include <string>
 #include <cstdio>
 #include <memory>
+#include <limits>
 
 #include "StructDef.h"
 #include "DecodeFileFactory.hpp"
@@ -34,55 +35,51 @@ public:
      * @param  {std::string} lidar_file:    lidar file path, include file name
      * @param  {std::string} pos_file:      pos file path, include file name, should be .out file
      * @param  {std::string} output_file:   output file path, include file name, should be .las file
-     * @return {*}
+     * @return {int}         0 = normal, 
+     *                      -1 = pos decode error
+     *                      -2 = lidar type error
+     *                      -3 = lidar open error
      */
-    void mainProcess(const Lidar_type& type, 
+    int mainProcess(const Lidar_type& type, 
                      const std::string& lidar_file,
                      const std::string& pos_file,
                      const std::string& output_file) {
-
-        DecodeLidarFile *p_decoder = DecodeFileFactory::instance(type);
-        if (p_decoder == nullptr)   return;
-
-        FILE *fp = fopen(lidar_file.c_str(), "rb");
-        if (fp == nullptr)
-            return;
-        
+        // decode pos file
         std::vector<Traj> traj;
         getPos(pos_file, traj);
-
-        auto buffer = applyBuffer();
-        
-        std::vector<LidarPoint<double>> point;
-        int num = 0;
-        while (fp) {
-            fread(buffer, sizeof(char), m_buffer_length, fp);
-            num = p_decoder->decodeFile(buffer, m_buffer_length, num, point);
-
-            // decode point
+        if (traj.size() == 0) {
+            LOG(ERROR) <<"pos file decode error!";
+            return -1;
         }
 
-        delete buffer;
+        // check lidar file
+        DecodeLidarFile *p_decoder = DecodeFileFactory::instance(type);
+        if (p_decoder == nullptr) {
+            LOG(ERROR) << "lidar type error!";
+            return -2;
+        }
+
+        FILE *fp = fopen(lidar_file.c_str(), "rb");
+        if (fp == nullptr) {
+            LOG(ERROR) << "lidar file can not open!";
+            return -3;
+        }
+        fclose(fp);
+
+        int read_num = 1024;
+        
+        std::vector<LidarPoint<double>> point;
+        while (fp) {
+            // decode lidar point
+            int num = p_decoder->decodeFile(lidar_file, m_read_point_num, point);
+            // decode las point
+        }
+
+        return 0;
     }
 
 private:
-    unsigned long long m_buffer_length = 1024 * 20;
-
-    /**
-     * @description: apply a new buffer, need to delete outside;
-     * @param  {*}
-     * @return {*}  char*
-     */
-    char* applyBuffer() {
-        try {
-            return new char[m_buffer_length];
-        }
-        catch(const std::exception& e) {
-            std::cerr << "buffer allocator error, no more memory." << std::endl;
-            std::cerr << e.what() << '\n';
-        }
-        return nullptr;
-    }
+    unsigned int m_read_point_num = 1024 * 20;
 
     void getPos(const std::string& pos_file, std::vector<Traj>& out) {
         DecodePosFile* p_decoder = new DecodeSbetFile();

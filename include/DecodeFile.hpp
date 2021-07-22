@@ -10,13 +10,13 @@
 #include "StructDef.h"
 
 #include <vector>
+#include <string>
 
 class DecodeLidarFile {
 public:
     DecodeLidarFile() {}
     virtual ~DecodeLidarFile() {}
-    virtual unsigned int decodeFile(const char* p_file,
-                                    const int& length, 
+    virtual unsigned int decodeFile(const std::string& file_path,
                                     const int& read_num , 
                                     std::vector<LidarPoint<double>>& out) = 0;
 };

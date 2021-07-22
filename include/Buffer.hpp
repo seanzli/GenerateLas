@@ -80,7 +80,6 @@ public:
             m_buffer.erase(m_buffer.begin(),m_buffer.end() - m_buffer_len);
         return m_buffer.size();
     }
-
     size_t push_back(std::vector<T>& vec) {
         std::lock_guard<std::mutex> lg(m_mutex);
         m_buffer.insert(m_buffer.end(), vec.begin(), vec.end());

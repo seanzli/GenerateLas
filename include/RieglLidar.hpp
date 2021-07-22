@@ -16,17 +16,28 @@
 
 class DecodeSdcLidarFile : public DecodeLidarFile {
 public:
-    DecodeSdcLidarFile() {}
-    virtual ~DecodeSdcLidarFile() override {}
-    virtual unsigned int decodeFile(const char* p_file, const int& length, const int& read_num ,
+    DecodeSdcLidarFile() : fp(nullptr), p_data(nullptr) {
+        fp = nullptr;
+    }
+    virtual ~DecodeSdcLidarFile() override {
+        if (fp)
+            fclose(fp);
+        if (p_data) {
+            delete p_data;
+            p_data = nullptr;
+        }
+    }
+    virtual unsigned int decodeFile(const std::string& file_path, const int& read_num ,
                             std::vector<LidarPoint<double>>& out) override {
-        const int size = std::min(read_num * m_struct_size, length) / m_struct_size;
-        SdcStruct *arr = new SdcStruct[size];
-        memcpy(arr, p_file, size*m_struct_size);
-        p_file +=  size*m_struct_size;
-        for (int i = 0; i < size; ++i)
-            out.emplace_back(convertSdc2LidarPoint(arr[i]));
-        return size;
+        if (nullptr == fp && false == openLidarFile(file_path))
+            return 0;
+        if (p_data == nullptr)
+            applyBuffer(read_num);
+        
+        int num = fread(p_data, m_struct_size, read_num, fp);
+        for (int i = 0; i < num; i++)
+            out.emplace_back(convertSdc2LidarPoint(p_data[i]));
+        return num;
     }
 
 private:
@@ -63,4 +74,34 @@ private:
         out.ref = in.reflectance;
         return out;
     }
+
+    void decodeHead(FILE* _fp) {
+        unsigned long long sdc_header_size = 0;
+        fread(&sdc_header_size, sizeof(char)*4, 1, _fp);
+        fseek(_fp, sdc_header_size, 0);
+    }
+
+    FILE *fp;
+    SdcStruct* p_data;
+    unsigned long long m_point_max;
+
+    bool openLidarFile(const std::string& file_path) {
+        fp = fopen(file_path.c_str(), "rb");
+        if (fp == nullptr) {
+            LOG(ERROR) << "LIDAR decode file open fault!";
+            return false;
+        }
+        decodeHead(fp);
+        return true;
+    }
+
+    void applyBuffer(const int& num) {
+        try {
+            p_data = new SdcStruct[num];
+        } catch (std::exception& e) {
+            LOG(ERROR) << "LIDAR decode buffer apply fault!";
+            std::cerr << e.what() << std::endl;
+        }
+    }
+
 };
