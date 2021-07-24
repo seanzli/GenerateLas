@@ -1,7 +1,7 @@
 /*
  * @Author: sean
  * @Date: 2021-07-24 10:30:27
- * @LastEditTime: 2021-07-24 11:07:08
+ * @LastEditTime: 2021-07-24 11:20:04
  * @LastEditors: Please set LastEditors
  * @Description: basic tools
  * @FilePath: /GenerateLas/include/Tools.hpp
@@ -14,6 +14,12 @@
 
 #include <glog/logging.h>
 
+
+/**
+ * @description: GanLasString Class, base on std::string, use class name to avoid input mistake;
+ * @param  {std::string} m_file_path:   file_path
+ * @param  {std::string} m_valid:       check file is exist or not
+ */
 namespace GenLas {
     class GenString {
     public:
@@ -36,6 +42,7 @@ namespace GenLas {
     public:
         explicit LidarFilePath(const std::string& _file) {
             m_file_path = _file;
+            m_valid = false;
             m_valid = check(_file);
         }
     };
@@ -44,10 +51,10 @@ namespace GenLas {
     public:
         explicit PosFilePath(const std::string& _file) {
             m_file_path = _file;
+            m_valid = false;
             m_valid = check(_file);
         }
     };
-
 };
 
 class Tools {
