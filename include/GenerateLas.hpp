@@ -51,7 +51,7 @@ public:
         checkTraj(traj);
 
         // check lidar file
-        DecodeLidarFile *p_decoder = DecodeFileFactory::instance(type);
+        std::shared_ptr<DecodeLidarFile> p_decoder = DecodeFileFactory::instance(type);
         checkLidarFile(p_decoder, lidar_file);
 
         // calculate
@@ -70,11 +70,11 @@ private:
     unsigned int m_read_point_num;
 
     void getPos(const std::string& pos_file, std::vector<Traj>& out) {
-        DecodePosFile* p_decoder = new DecodeSbetFile();
+        std::shared_ptr<DecodePosFile> p_decoder(new DecodeSbetFile());
         p_decoder->decodePos(pos_file, out);
     }
 
-    int checkLidarFile(DecodeLidarFile* p_decoder, const std::string& lidar_file) {
+    int checkLidarFile(std::shared_ptr<DecodeLidarFile> p_decoder, const std::string& lidar_file) {
         if (p_decoder == nullptr) {
             LOG(ERROR) << "lidar type error!";
             throw -2;

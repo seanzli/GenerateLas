@@ -18,9 +18,9 @@ public:
     DecodeFileFactory() = default;
     ~DecodeFileFactory() = default;
 
-    static DecodeLidarFile* instance(const Lidar_type & type) {
+    static std::shared_ptr<DecodeLidarFile> instance(const Lidar_type & type) {
         switch (type) {
-            case LIDAR_TYPE_RIEGL: return new DecodeSdcLidarFile(); break;
+            case LIDAR_TYPE_RIEGL: return std::shared_ptr<DecodeLidarFile>(new DecodeSdcLidarFile()); break;
         }
         return nullptr;
     }
