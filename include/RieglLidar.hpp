@@ -2,8 +2,8 @@
  * @Description: Decode Riegl Lidar File
  * @Author: Sean
  * @Date: 2021-07-14 21:54:07
- * @LastEditTime: 2021-07-24 11:07:47
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-24 11:36:01
+ * @LastEditors: Sean
  * @Reference: 
  */
 
@@ -28,7 +28,7 @@ public:
     }
     virtual unsigned int decodeFile(const std::string & file_path, const int& read_num ,
                             std::vector<LidarPoint<double>>& out) override {
-        if (nullptr == fp)
+        if (nullptr == fp && openLidarFile(file_path) == false)
             return 0;
         if (p_data == nullptr)
             applyBuffer(read_num);

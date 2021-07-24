@@ -1,8 +1,8 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-24 11:08:37
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-24 11:26:07
+ * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
  */
@@ -13,7 +13,7 @@
 #include <limits>
 
 #include "StructDef.h"
-#include "Tools.hpp"
+#include "GenFileString.hpp"
 #include "DecodeFileFactory.hpp"
 #include "DecodeSbet.hpp"
 #include "Coordinate.hpp"

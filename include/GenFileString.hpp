@@ -1,10 +1,10 @@
 /*
- * @Author: sean
+ * @Author: Sean
  * @Date: 2021-07-24 10:30:27
- * @LastEditTime: 2021-07-24 11:20:04
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-24 11:25:56
+ * @LastEditors: Sean
  * @Description: basic tools
- * @FilePath: /GenerateLas/include/Tools.hpp
+ * @FilePath: /GenerateLas/include/GenFileString.hpp
  */
 #pragma once
 
@@ -55,8 +55,4 @@ namespace GenLas {
             m_valid = check(_file);
         }
     };
-};
-
-class Tools {
-    
 };
