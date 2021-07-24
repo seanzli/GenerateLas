@@ -1,8 +1,8 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-16 22:46:17
- * @LastEditors: Sean
+ * @LastEditTime: 2021-07-24 11:08:37
+ * @LastEditors: Please set LastEditors
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
  */
@@ -13,6 +13,7 @@
 #include <limits>
 
 #include "StructDef.h"
+#include "Tools.hpp"
 #include "DecodeFileFactory.hpp"
 #include "DecodeSbet.hpp"
 #include "Coordinate.hpp"
@@ -42,8 +43,8 @@ public:
      *                      -3 = lidar open error
      */
     int mainProcess(const Lidar_type& type, 
-                     const std::string& lidar_file,
-                     const std::string& pos_file,
+                     const GenLas::LidarFilePath& lidar_file,
+                     const GenLas::PosFilePath& pos_file,
                      const std::string& output_file) {
         // decode pos file
         std::vector<Traj> traj;

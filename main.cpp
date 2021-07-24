@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: Sean
  * @Date: 2021-07-13 21:11:37
- * @LastEditTime: 2021-07-13 21:53:24
- * @LastEditors: Sean
+ * @LastEditTime: 2021-07-24 11:11:35
+ * @LastEditors: Please set LastEditors
  * @Reference: 
  */
 #include <iostream>
@@ -18,18 +18,22 @@ int main(int argc, char* argv[]) {
     google::InitGoogleLogging(argv[0]);
     google::SetLogDestination(google::GLOG_INFO, "../log/log_");
 
-    LOG(INFO) << "------start-------" << std::endl;
+    LOG(INFO) << "------start-------\n";
     //
     GenerateLas generate;
     generate.defindCoordinate(EllipBuilder(WGS84));
     
-    std::string pos_file = "/home/z/Documents/data/sbet_Mission.out";
-    std::string sdc_file = "/home/z/Documents/data/190326_072129_Scanner_1.sdc";
+    GenLas::PosFilePath pos_file("/home/z/Documents/data/sbet_Mission.out");
+    GenLas::LidarFilePath sdc_file("/home/z/Documents/data/190326_072129_Scanner_1.sdc");
+
     std::string out_file = "/home/z/Documents/data/190326_072129_Scanner_1.las";
     
-    generate.mainProcess(LIDAR_TYPE_RIEGL, sdc_file, pos_file, out_file);
+    if (pos_file.m_valid && sdc_file.m_valid)
+        generate.mainProcess(LIDAR_TYPE_RIEGL, sdc_file, pos_file, out_file);
+    else
+        LOG(ERROR) << "pos file or lidar file, can not open! \n";
 
-    LOG(INFO) << "------terminal-------" << std::endl;
+    LOG(INFO) << "------terminal-------\n";
 
     return 0;
 }
