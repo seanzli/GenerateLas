@@ -2,7 +2,7 @@
  * @Description: decode pos file
  * @Author: Sean
  * @Date: 2021-07-15 21:11:21
- * @LastEditTime: 2021-07-16 23:15:03
+ * @LastEditTime: 2021-07-25 10:48:06
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -30,6 +30,7 @@ public:
     virtual ~DecodeSbetFile() {}
 
     virtual void decodePos(const std::string& pos_file, std::vector<Traj>& out) {
+        VLOG(3) << "Pos file type = SBET\n";
         std::vector<SbetEntry> tmp;
         decodeSbet(pos_file, tmp);
         for (int i = 0; i < tmp.size(); ++i)

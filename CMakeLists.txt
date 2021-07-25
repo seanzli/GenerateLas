@@ -12,8 +12,7 @@ include_directories(./include)
 include_directories(./Test)
 
 # glog
-find_package(Glog REQUIRED)
-include_directories(BEFORE ${GLOG_INCLUDE_DIRS}) 
+find_package(glog 0.5.0 REQUIRED)
 
 add_executable(${PROJECT_NAME} main.cpp)
 target_link_libraries(${PROJECT_NAME} -lglog -lgflags -lpthread)
