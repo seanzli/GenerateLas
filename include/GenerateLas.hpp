@@ -1,20 +1,27 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-25 12:55:28
+ * @LastEditTime: 2021-07-25 16:37:16
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
  */
+
+// c++
 #include <vector>
 #include <string>
 #include <cstdio>
 #include <memory>
 #include <limits>
-#include <typeinfo>
 
+// omp
 #include <omp.h>
 
+// eigen
+#include <eigen3/Eigen/Core>
+#include <eigen3/Eigen/Geometry>
+
+// method from other header files
 #include "StructDef.h"
 #include "GenFileString.hpp"
 #include "DecodeFileFactory.hpp"
