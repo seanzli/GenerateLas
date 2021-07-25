@@ -2,7 +2,7 @@
  * @Description: Decode Riegl Lidar File
  * @Author: Sean
  * @Date: 2021-07-14 21:54:07
- * @LastEditTime: 2021-07-24 11:36:01
+ * @LastEditTime: 2021-07-25 10:13:34
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -13,6 +13,7 @@
 
 #include <cstring>
 #include <cstdio>
+#include <glog/logging.h>
 
 class DecodeSdcLidarFile : public DecodeLidarFile {
 public:
@@ -85,9 +86,10 @@ private:
     unsigned long long m_point_max;
 
     bool openLidarFile(const std::string& file_path) {
+        VLOG(3) << "Open lidar file = " << file_path << "\n";
         fp = fopen(file_path.c_str(), "rb");
         if (fp == nullptr) {
-            LOG(ERROR) << "LIDAR decode file open fault!";
+            LOG(ERROR) << "LIDAR decode file open fault!\n";
             return false;
         }
         decodeHead(fp);
@@ -95,10 +97,14 @@ private:
     }
 
     void applyBuffer(const int& num) {
+        VLOG(3) << "Apply decode lidar buffer size = "
+                << num << " * " << m_struct_size 
+                << " = " << num * m_struct_size
+                << "\n";
         try {
             p_data = new SdcStruct[num];
         } catch (std::exception& e) {
-            LOG(ERROR) << "LIDAR decode buffer apply fault!";
+            LOG(ERROR) << "LIDAR decode buffer apply fault!\n";
             std::cerr << e.what() << std::endl;
         }
     }

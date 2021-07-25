@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-24 11:26:07
+ * @LastEditTime: 2021-07-25 10:13:47
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -47,21 +47,25 @@ public:
                      const GenLas::PosFilePath& pos_file,
                      const std::string& output_file) {
         // decode pos file
+        //DLOG() << "Decode Pos File------\n";
         std::vector<Traj> traj;
         getPos(pos_file, traj);
         checkTraj(traj);
 
         // check lidar file
+        //DLOG() << "Decode Lidar File------\n";
         std::shared_ptr<DecodeLidarFile> p_decoder = DecodeFileFactory::instance(type);
         checkLidarFile(p_decoder, lidar_file);
 
         // calculate
+        //VLOG(0) << "Calculate Point------\n";
         int read_num = m_read_point_num;
         std::vector<LidarPoint<double>> point;
         while (read_num) {
             // decode lidar point
             point.clear();
             read_num = p_decoder->decodeFile(lidar_file, m_read_point_num, point);
+            //VLOG(5) << "--> Decode point num = " << read_num << "\n";
             // decode las point
         }
         return 0;
@@ -77,13 +81,13 @@ private:
 
     int checkLidarFile(std::shared_ptr<DecodeLidarFile> p_decoder, const std::string& lidar_file) {
         if (p_decoder == nullptr) {
-            LOG(ERROR) << "lidar type error!";
+            LOG(ERROR) << "lidar type error!\n";
             throw -2;
             return -2;
         }
         FILE *fp = fopen(lidar_file.c_str(), "rb");
         if (fp == nullptr) {
-            LOG(ERROR) << "lidar file can not open!";
+            LOG(ERROR) << "lidar file can not open!\n";
             throw -3;
             return -3;
         }
@@ -92,8 +96,9 @@ private:
         return 0;
     }
     int checkTraj(const std::vector<Traj>& traj) {
+        VLOG(3) << "traj size = " << traj.size() << "\n";
         if (traj.size() == 0) {
-            LOG(ERROR) <<"pos file decode error!";
+            LOG(ERROR) <<"pos file decode error!\n";
             throw -1;
             return -1;
         }

@@ -2,8 +2,8 @@
  * @Description: Decode LiDAR orignal file
  * @Author: Sean
  * @Date: 2021-07-14 21:52:09
- * @LastEditTime: 2021-07-24 11:08:02
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-24 11:52:02
+ * @LastEditors: Sean
  * @Reference: 
  */
 #pragma once
