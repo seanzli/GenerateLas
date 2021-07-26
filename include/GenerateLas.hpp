@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-26 20:40:23
+ * @LastEditTime: 2021-07-26 21:03:53
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -169,7 +169,7 @@ private:
     void calculate(const Traj& traj,const LidarPoint<double>& point, Point<double>& out) {
         Eigen::Matrix<double, 3, 1> _point(point.point.x, point.point.y, point.point.z);
 
-        auto _p = GenLas::Parameter::getTrans();
+        auto _p = GenLas::Parameter::instance().getTrans();
 
         _point = _p * _point;
 

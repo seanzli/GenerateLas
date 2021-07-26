@@ -4,7 +4,7 @@
  * @Author: Sean
  * @Date: 2021-07-25 15:53:42
  * @LastEditors: Sean
- * @LastEditTime: 2021-07-26 20:34:42
+ * @LastEditTime: 2021-07-26 21:08:19
  */
 
 
@@ -15,8 +15,13 @@ namespace GenLas {
     
     class Parameter {
     public:
-        Parameter();
-        Parameter(  const Eigen::Matrix<double, 3, 3>& rotate,
+
+        static Parameter& instance() {
+            static Parameter m_instance;
+            return m_instance;
+        }
+
+        void SetLidar2body(  const Eigen::Matrix<double, 3, 3>& rotate,
                     const Eigen::Matrix<double, 3, 1>& translate,
                     const Eigen::Matrix<double, 3, 1>& check_angle) {
             m_trans = Eigen::Transform<double, 3, Eigen::Affine>::Identity();
@@ -27,12 +32,16 @@ namespace GenLas {
             m_trans.rotate(Eigen::AngleAxisd(check_angle(2, 0), Eigen::Vector3d(0, 0, 1)));
         }
 
-        static Eigen::Transform<double, 3, Eigen::Affine>& getTrans() {
+        Eigen::Transform<double, 3, Eigen::Affine>& getTrans() {
             return m_trans;
         }
 
     private:
-        static Eigen::Transform<double, 3, Eigen::Affine> m_trans;
+        Parameter() {}
+        
+        Eigen::Transform<double, 3, Eigen::Affine> m_trans;
+
+
 
     };
 };
