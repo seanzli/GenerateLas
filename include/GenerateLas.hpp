@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-25 16:37:16
+ * @LastEditTime: 2021-07-26 20:40:23
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -17,10 +17,6 @@
 // omp
 #include <omp.h>
 
-// eigen
-#include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Geometry>
-
 // method from other header files
 #include "StructDef.h"
 #include "GenFileString.hpp"
@@ -28,6 +24,8 @@
 #include "DecodeSbet.hpp"
 #include "Coordinate.hpp"
 #include "Buffer.hpp"
+
+#include "Parameters.hpp"
 
 class GenerateLas {
 public:
@@ -128,7 +126,7 @@ private:
 //#pragma omp parallel for
         for (int i = 0; i < point.size(); ++i) {
             Traj cur_traj = getTrajPoint(point[i].gps_time, traj);
-            calculate(cur_traj, _out[i]);
+            calculate(cur_traj, point[i], _out[i]);
         }
         out.push_back(_out);
         return point.size();
@@ -168,7 +166,17 @@ private:
         return out;
     }
 
-    void calculate(const Traj& traj, Point<double>& out) {
+    void calculate(const Traj& traj,const LidarPoint<double>& point, Point<double>& out) {
+        Eigen::Matrix<double, 3, 1> _point(point.point.x, point.point.y, point.point.z);
+
+        auto _p = GenLas::Parameter::getTrans();
+
+        _point = _p * _point;
+
+        out.x = _point(0,0);
+        out.y = _point(1,0);
+        out.z = _point(2,0);
+
         return;
     }
 

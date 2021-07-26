@@ -4,7 +4,7 @@
  * @Author: Sean
  * @Date: 2021-07-25 15:53:42
  * @LastEditors: Sean
- * @LastEditTime: 2021-07-25 16:36:33
+ * @LastEditTime: 2021-07-26 20:34:42
  */
 
 
@@ -27,12 +27,12 @@ namespace GenLas {
             m_trans.rotate(Eigen::AngleAxisd(check_angle(2, 0), Eigen::Vector3d(0, 0, 1)));
         }
 
-        Eigen::Transform<double, 3, Eigen::Affine>& getTrans() {
+        static Eigen::Transform<double, 3, Eigen::Affine>& getTrans() {
             return m_trans;
         }
 
     private:
-        Eigen::Transform<double, 3, Eigen::Affine> m_trans;
+        static Eigen::Transform<double, 3, Eigen::Affine> m_trans;
 
     };
 };
