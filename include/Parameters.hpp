@@ -4,7 +4,7 @@
  * @Author: Sean
  * @Date: 2021-07-25 15:53:42
  * @LastEditors: Sean
- * @LastEditTime: 2021-07-26 21:08:19
+ * @LastEditTime: 2021-07-27 21:38:14
  */
 
 
@@ -40,8 +40,5 @@ namespace GenLas {
         Parameter() {}
         
         Eigen::Transform<double, 3, Eigen::Affine> m_trans;
-
-
-
     };
 };
