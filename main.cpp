@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: Sean
  * @Date: 2021-07-13 21:11:37
- * @LastEditTime: 2021-07-26 21:05:47
+ * @LastEditTime: 2021-07-27 22:02:54
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -13,22 +13,7 @@
 
 #include "GenerateLas.hpp"
 
-int main(int argc, char* argv[]) {
-    // google-logging-library initailization
-    google::InitGoogleLogging(argv[0]);
-    google::SetLogDestination(google::GLOG_INFO, "../log/log_");
-
-    LOG(INFO) << "------start-------\n";
-    //
-    GenerateLas generate;
-    generate.defindCoordinate(EllipBuilder(WGS84));
-    
-    GenLas::PosFilePath pos_file("/home/z/Documents/data/sbet_Mission.out");
-    GenLas::LidarFilePath sdc_file("/home/z/Documents/data/190326_072129_Scanner_1.sdc");
-
-    std::string out_file = "/home/z/Documents/data/190326_072129_Scanner_1.las";
-    
-    
+int setPara() {
     Eigen::Matrix<double, 3, 3> rotate_matrix = Eigen::Matrix<double, 3, 3>::Zero();
 
     rotate_matrix(0, 2) = 1.0;
@@ -43,7 +28,22 @@ int main(int argc, char* argv[]) {
     Eigen::Matrix<double, 3, 1> angle_check = Eigen::Matrix<double, 3, 1>(0.25569, -0.27103, -0.00771);
     
     GenLas::Parameter::instance().SetLidar2body(rotate_matrix, trans_arm, angle_check);
+}
 
+int main(int argc, char* argv[]) {
+    // google-logging-library initailization
+    google::InitGoogleLogging(argv[0]);
+    google::SetLogDestination(google::GLOG_INFO, "../log/log_");
+
+    LOG(INFO) << "------start-------\n";
+    //
+    GenerateLas generate;
+    generate.defindCoordinate(EllipBuilder(WGS84));
+    
+    GenLas::PosFilePath pos_file("/home/z/Documents/data/sbet_Mission.out");
+    GenLas::LidarFilePath sdc_file("/home/z/Documents/data/190326_072129_Scanner_1.sdc");
+    std::string out_file = "/home/z/Documents/data/190326_072129_Scanner_1.las";
+    
     if (pos_file.m_valid && sdc_file.m_valid)
         generate.mainProcess(LIDAR_TYPE_RIEGL, sdc_file, pos_file, out_file);
     else
