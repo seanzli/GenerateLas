@@ -2,3 +2,4 @@
 build
 build_linux
 log
+.3rd/ini.h

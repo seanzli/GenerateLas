@@ -10,6 +10,7 @@ enable_testing()
 
 include_directories(./include)
 include_directories(./Test)
+include_directories(./3rd)
 
 # glog
 find_package(glog 0.5.0 REQUIRED)

@@ -2,30 +2,54 @@
  * @Description: 
  * @Author: Sean
  * @Date: 2021-07-13 21:11:37
- * @LastEditTime: 2021-07-27 22:02:54
+ * @LastEditTime: 2021-07-28 21:30:53
  * @LastEditors: Sean
  * @Reference: 
  */
 #include <iostream>
 #include <glog/logging.h>
-
 #include <string>
+#include <regex>
+
+//3rd
+#include "ini.h"
 
 #include "GenerateLas.hpp"
 
 int setPara() {
-    Eigen::Matrix<double, 3, 3> rotate_matrix = Eigen::Matrix<double, 3, 3>::Zero();
+    // use https://github.com/pulzed/mINI.git
+    std::string parameter_file = "parameter.ini";
+    mINI::INIFile file(parameter_file);
+    mINI::INIStructure ini;
+    
+    if (file.read(ini) == false) {
+        LOG(ERROR) << "parameter.ini read false! \n"; 
+        return 0;
+    }
+    
+    std::string matrix = ini["rotate"]["matrix"];
+    std::vector<double> data;
+    std::regex re(",");
+    std::vector<std::string> matrix_s(std::sregex_token_iterator(matrix.begin(), matrix.end(), re, -1),
+                                      std::sregex_token_iterator());
+    if (matrix_s.size() != 9) {
+        LOG(ERROR) << "rotate matrix: decode error!\n";
+        return 0;
+    }
 
-    rotate_matrix(0, 2) = 1.0;
-    rotate_matrix(1, 1) = 1.0;
-    rotate_matrix(2, 0) = -1.0;
+    Eigen::Matrix<double, 3, 3> rotate_matrix = Eigen::Matrix<double, 3, 3>::Zero();
+    for (int i = 0; i < 9; ++i)
+        rotate_matrix(i) = std::stod(matrix_s[i]);
 
     Eigen::Matrix<double, 3, 1> trans_arm = Eigen::Matrix<double, 3, 1>::Zero();
-    trans_arm(0, 0) = 0.1645;
-    trans_arm(1, 0) = 0.0002;
-    trans_arm(2, 0) = -0.004;
+    trans_arm(0, 0) = std::stod(ini["trans"]["x"]);
+    trans_arm(1, 0) = std::stod(ini["trans"]["y"]);
+    trans_arm(2, 0) = std::stod(ini["trans"]["z"]);
 
-    Eigen::Matrix<double, 3, 1> angle_check = Eigen::Matrix<double, 3, 1>(0.25569, -0.27103, -0.00771);
+    Eigen::Matrix<double, 3, 1> angle_check = Eigen::Matrix<double, 3, 1>::Zero();
+    angle_check(0, 0) = std::stod(ini["check angle"]["roll"]);
+    angle_check(1, 0) = std::stod(ini["check angle"]["pitch"]);
+    angle_check(2, 0) = std::stod(ini["check angle"]["heading"]);
     
     GenLas::Parameter::instance().SetLidar2body(rotate_matrix, trans_arm, angle_check);
 }
