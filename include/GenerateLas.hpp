@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-29 20:42:52
+ * @LastEditTime: 2021-07-29 20:53:35
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -123,7 +123,7 @@ private:
         if (point.size() == 0)
             return 0;
         std::vector<Point<double>> _out(point.size());
-//#pragma omp parallel for
+    #pragma omp parallel for
         for (int i = 0; i < point.size(); ++i) {
             Traj cur_traj = getTrajPoint(point[i].gps_time, traj);
             calculate(cur_traj, point[i], _out[i]);
