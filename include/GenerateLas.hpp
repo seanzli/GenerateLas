@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-26 21:03:53
+ * @LastEditTime: 2021-07-29 20:42:52
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -173,9 +173,9 @@ private:
 
         _point = _p * _point;
 
-        out.x = _point(0,0);
-        out.y = _point(1,0);
-        out.z = _point(2,0);
+        out.x = _point(0,0) + traj.pos.x;
+        out.y = _point(1,0) + traj.pos.y;
+        out.z = _point(2,0) + traj.pos.z;
 
         return;
     }
