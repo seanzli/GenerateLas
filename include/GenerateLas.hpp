@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-29 20:53:35
+ * @LastEditTime: 2021-07-29 20:56:50
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -78,6 +78,7 @@ public:
             VLOG(5) << "--> Decode point num = " << read_num << "\n";
             // decode las point
             calculate(point, traj, out);
+            // gen las
         }
         return 0;
     }
