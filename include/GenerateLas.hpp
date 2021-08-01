@@ -1,7 +1,7 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-07-29 20:56:50
+ * @LastEditTime: 2021-08-01 10:29:13
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
@@ -26,6 +26,7 @@
 #include "Buffer.hpp"
 
 #include "Parameters.hpp"
+#include "LasGen.hpp"
 
 class GenerateLas {
 public:
@@ -66,8 +67,12 @@ public:
         std::shared_ptr<DecodeLidarFile> p_decoder = DecodeFileFactory::instance(type);
         checkLidarFile(p_decoder, lidar_file);
 
+        // init las file
+        GenLas::LasGen& m_lasgen = GenLas::LasGen::instance();
+        m_lasgen.setPara(output_file, traj[0].pos);
         // calculate
         VLOG(0) << "Calculate Point------\n";
+
         int read_num = m_read_point_num;
         std::vector<LidarPoint<double>> point;
         Buffer<Point<double>> out;
@@ -79,6 +84,8 @@ public:
             // decode las point
             calculate(point, traj, out);
             // gen las
+            std::vector<Point<double>> vec = out.pop_front(out.size());
+            m_lasgen.setPoint(vec);
         }
         return 0;
     }

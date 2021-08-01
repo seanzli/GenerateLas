@@ -2,7 +2,7 @@
  * @Description: Basic Struct Defind
  * @Author: Sean
  * @Date: 2021-07-13 21:24:46
- * @LastEditTime: 2021-07-25 12:57:36
+ * @LastEditTime: 2021-08-01 09:55:05
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -82,6 +82,10 @@ struct Point
     {
         out << "value: x = " << op.x << " ,y = " << op.y << " ,z = " << op.z << std::endl;
         return out;
+    }
+
+    const Point round() const{
+        return Point(std::round(this->x), std::round(this->y), std::round(this->z));
     }
 };
 
