@@ -4,7 +4,7 @@
  * @Author: Sean
  * @Date: 2021-08-01 17:22:21
  * @LastEditors: Sean
- * @LastEditTime: 2021-08-04 21:50:54
+ * @LastEditTime: 2021-08-04 22:02:09
  */
 
 // c++ stl
@@ -150,7 +150,17 @@ namespace Coordinate {
             return out;
         }
 
-        
+        XYZ lla2xyz(const LLA& lla) {
+            if (utm == nullptr)
+                return XYZ{};
+            return utm->lla2xyz(lla);
+        }
+
+        LLA xyz2lla(const XYZ& xyz) {
+            if (utm == nullptr)
+                return LLA{};
+            return utm->xyz2lla(xyz);
+        }
     private:
         Ellipsoid ellip;
         RectangleCoord rect;
