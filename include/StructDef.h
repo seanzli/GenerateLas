@@ -2,7 +2,7 @@
  * @Description: Basic Struct Defind
  * @Author: Sean
  * @Date: 2021-07-13 21:24:46
- * @LastEditTime: 2021-08-01 09:55:05
+ * @LastEditTime: 2021-08-04 21:53:48
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -13,6 +13,9 @@
 // using namespace ??
 
 const unsigned int SECENDS_IN_DAY = 86400;
+const double PI = 3.1415926535898;
+const double D2R = PI/180.0;
+const double R2D = 180.0/PI;
 
 template<class T> // should be float or double
 struct Point
@@ -107,6 +110,7 @@ using ECEF = Point<double>; // meters
 using VAL  = Point<double>; // m/s
 using LLA  = Point<double>;
 using ATT  = Point<double>;
+using XYZ  = Point<double>;
 
 
 struct Traj {

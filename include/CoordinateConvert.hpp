@@ -4,7 +4,7 @@
  * @Author: Sean
  * @Date: 2021-08-01 17:22:21
  * @LastEditors: Sean
- * @LastEditTime: 2021-08-03 20:35:03
+ * @LastEditTime: 2021-08-04 21:50:54
  */
 
 // c++ stl
@@ -16,6 +16,8 @@
 
 // struct def
 #include "StructDef.h"
+
+#include "Mercartor.hpp"
 
 namespace Coordinate {
     // ellipsoid arguments setting
@@ -79,9 +81,18 @@ namespace Coordinate {
     // all application use one instance, so singleton pattern ?
     class Convert {
     public:
-        Convert(const Ellipsoid& in) { ellip = in; }
-        Convert(const Ellipsoid& _ellip, const RectangleCoord& _rect) : ellip(_ellip), rect(_rect) {}
-        ~Convert() {}
+        Convert(const Ellipsoid& in) { 
+            ellip = in; 
+        }
+        Convert(const Ellipsoid& _ellip, const RectangleCoord& _rect) : ellip(_ellip), rect(_rect) {
+            utm = new GenLas::Mercartor(_ellip.a(), _ellip.b(),rect.centerLon(), rect.scale(),rect.x(), rect.y());
+        }
+        ~Convert() {
+            if (utm != nullptr) {
+                delete utm;
+                utm = nullptr;
+            }
+        }
 
         LLA ecef2lla(const ECEF& in) {
             double p = 0.0, slat = 0.0, N = 0.0, htold = 0.0, latold = 0.0;
@@ -143,5 +154,8 @@ namespace Coordinate {
     private:
         Ellipsoid ellip;
         RectangleCoord rect;
+        GenLas::Mercartor *utm = nullptr;
     };
+
+    
 };
