@@ -53,6 +53,19 @@ public:
         return std::vector<T>();
     }
 
+    void pop_front(const int n, std::vector<T>& out) {
+        std::lock_guard<std::mutex> lg(m_mutex);
+        out.clear();
+        if (n >= m_buffer.size()) {
+            out.insert(out.end(), m_buffer.begin(), m_buffer.end());
+            m_buffer.clear();
+        } else {
+            out.insert(out.end(), m_buffer.begin(), m_buffer.begin() + n);
+            m_buffer.erase(m_buffer.begin(), m_buffer.begin() + n);
+        }
+        return;
+    }
+
     std::vector<T> pop_back(const int n) {
         std::lock_guard<std::mutex> lg(m_mutex);
         if (n >= m_buffer.size()) {
@@ -65,6 +78,19 @@ public:
             return out;
         }
         return std::vector<T>();
+    }
+
+    void pop_back(const int n, std::vector<T>& out) {
+        std::lock_guard<std::mutex> lg(m_mutex);
+        out.clear();
+        if (n >= m_buffer.size()) {
+            out.insert(out.end() ,m_buffer.begin(), m_buffer.end());
+            m_buffer.clear();
+        } else {
+            out.insert(out.end(), m_buffer.end() - n, m_buffer.end());
+            m_buffer.erase(m_buffer.end() - n, m_buffer.end());
+        }
+        return;
     }
 
     size_t push_front(const T& value) {

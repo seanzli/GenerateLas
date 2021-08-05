@@ -4,8 +4,10 @@
  * @Author: Sean
  * @Date: 2021-08-01 17:22:21
  * @LastEditors: Sean
- * @LastEditTime: 2021-08-04 22:02:09
+ * @LastEditTime: 2021-08-05 17:21:44
  */
+
+#pragma once
 
 // c++ stl
 #include <iostream>
@@ -161,6 +163,18 @@ namespace Coordinate {
                 return LLA{};
             return utm->xyz2lla(xyz);
         }
+
+        XYZ ecef2xyz(const ECEF& in) {
+            return lla2xyz(ecef2lla(in));
+        }
+        
+        void ecef2xyz(const std::vector<ECEF>& in, std::vector<XYZ>& out) {
+            out.resize(in.size());
+            for (int i = 0; i < in.size(); ++i)
+                out[i] = lla2xyz(ecef2lla(in[i]));
+            return;
+        }
+
     private:
         Ellipsoid ellip;
         RectangleCoord rect;

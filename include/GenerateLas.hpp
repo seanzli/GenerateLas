@@ -1,11 +1,13 @@
 /*
  * @Author: Sean
  * @Date: 2021-07-13 21:13:43
- * @LastEditTime: 2021-08-01 10:29:13
+ * @LastEditTime: 2021-08-05 17:21:54
  * @LastEditors: Sean
  * @Description: Generate Las Function Main Process
  * @FilePath: \GenerateLas\include\GenerateLas.hpp
  */
+#pragma once
+
 
 // c++
 #include <vector>
@@ -22,23 +24,29 @@
 #include "GenFileString.hpp"
 #include "DecodeFileFactory.hpp"
 #include "DecodeSbet.hpp"
-#include "Coordinate.hpp"
 #include "Buffer.hpp"
 
 #include "Parameters.hpp"
 #include "LasGen.hpp"
+#include "CoordinateConvert.hpp"
+//#include "Coordinate.hpp"
 
 class GenerateLas {
 public:
     GenerateLas() : m_read_point_num(1024 * 20) {}
     GenerateLas(unsigned int _size) : m_read_point_num(_size) {}
-    ~GenerateLas() = default;
+    ~GenerateLas() {
+        if (p_coord) {
+            delete p_coord;
+            p_coord = nullptr;
+        }
+    }
 
     // define coordinate, class coordinate is singleton mono pattern, use as globle, 
     // use instance() to get
     // use instance(const double&, const double&) to modify;
-    void defindCoordinate(Ellip para) {
-        Coordinate::instance(para);
+    void defindCoordinate(const Coordinate::Ellipsoid& ellpsoid, const Coordinate::RectangleCoord& rect) {
+        p_coord = new Coordinate::Convert(ellpsoid,rect);
     }
 
     /**
@@ -84,8 +92,13 @@ public:
             // decode las point
             calculate(point, traj, out);
             // gen las
-            std::vector<Point<double>> vec = out.pop_front(out.size());
-            m_lasgen.setPoint(vec);
+            std::vector<Point<double>> vec;
+            out.pop_front(out.size(), vec);
+            // convert
+            std::vector<Point<double>> xyz;
+            p_coord->ecef2xyz(vec, xyz);
+
+            m_lasgen.setPoint(xyz);
         }
         return 0;
     }
@@ -94,9 +107,11 @@ private:
     unsigned int m_read_point_num;
     double m_precision = 1e-9;
 
+    Coordinate::Convert *p_coord = nullptr;
+
     void getPos(const std::string& pos_file, std::vector<Traj>& out) {
         VLOG(3) << "Decode pos file -------\n";
-        std::shared_ptr<DecodePosFile> p_decoder(new DecodeSbetFile());
+        std::shared_ptr<DecodePosFile> p_decoder(new DecodeSbetFile(p_coord));
         p_decoder->decodePos(pos_file, out);
     }
 

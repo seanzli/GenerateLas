@@ -2,7 +2,7 @@
  * @Description: decode pos file
  * @Author: Sean
  * @Date: 2021-07-15 21:11:21
- * @LastEditTime: 2021-07-25 10:48:06
+ * @LastEditTime: 2021-08-05 17:23:28
  * @LastEditors: Sean
  * @Reference: 
  */
@@ -14,19 +14,23 @@
 #include <cstdio>
 
 #include "StructDef.h"
-#include "Coordinate.hpp"
+//#include "Coordinate.hpp"
+#include "CoordinateConvert.hpp"
 
 class DecodePosFile {
 public:
-    DecodePosFile() = default;
+    DecodePosFile(Coordinate::Convert* p) : mp_coord(p) {}
     virtual ~DecodePosFile() {}
     virtual void decodePos(const std::string& pos_file, std::vector<Traj>& out) {}
+    Coordinate::Convert* mp_coord = nullptr;
 protected:
-    Coordinate* mp_coord = Coordinate::instance(EllipBuilder(WGS84));
+    //Coordinate* mp_coord = Coordinate::instance(EllipBuilder(WGS84));
+private:
 };
 
 class DecodeSbetFile : public DecodePosFile {
 public:
+    DecodeSbetFile(Coordinate::Convert* p) : DecodePosFile(p) {}
     virtual ~DecodeSbetFile() {}
 
     virtual void decodePos(const std::string& pos_file, std::vector<Traj>& out) {
