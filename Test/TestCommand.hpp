@@ -4,7 +4,7 @@
  * @Author: Sean
  * @Date: 2021-08-06 17:27:52
  * @LastEditors: Sean
- * @LastEditTime: 2021-08-06 17:28:45
+ * @LastEditTime: 2021-08-08 09:59:27
  */
 
 
@@ -12,6 +12,21 @@
 #include <gtest/gtest.h>
 
 #include "Command.hpp"
+
+class TestClass1{
+public:
+    TestClass1(int _val) :val(_val) {}
+    void TestFunction(int x) {
+        std::cout << "TestClase1 + " << val << ", " << x << std::endl;
+    }
+private:
+    int val;
+};
+
+int x() {
+    std::cout << "x " << std::endl;
+    return 0;
+}
 
 TEST(Command, handleFunction) {
     CommandSystem::Manager m;
